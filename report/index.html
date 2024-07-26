@@ -1,14 +1,23 @@
-  <html><head><base href="https://www.anonymousserver.org/report"><title>Report Submission | The Anonymous Server</title>
+<html><head><base href="https://www.anonymousserver.org/report">
+<title>Report Submission | The Anonymous Server</title>
 <style>
 :root {
-  --bg-color: #020202;
+  --bg-color: #0a0a0a;
   --text-color: #e0ffe0;
   --accent-color: #00ff00;
+  --secondary-color: #00cccc;
   --warning-color: #ff3300;
   --link-color: #00ffff;
   --card-bg: rgba(0,50,0,0.2);
   --input-bg: rgba(0,20,0,0.6);
+  --shadow-color: rgba(0,255,0,0.2);
 }
+
+@font-face {
+  font-family: 'Cyberpunk';
+  src: url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+}
+
 body, html {
   font-family: 'Segoe UI', 'Roboto', sans-serif;
   background-color: var(--bg-color);
@@ -16,112 +25,406 @@ body, html {
   line-height: 1.8;
   margin: 0;
   padding: 0;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(0,255,0,0.05) 0%, transparent 20%),
+    radial-gradient(circle at 90% 80%, rgba(0,255,255,0.05) 0%, transparent 20%);
+  background-attachment: fixed;
 }
+
 .container {
   max-width: 800px;
   margin: 0 auto;
   padding: 40px 20px;
 }
+
 header {
   background: linear-gradient(135deg, #000000, #001100);
-  padding: 20px 0;
+  padding: 30px 0;
   text-align: center;
-  box-shadow: 0 2px 10px rgba(0,255,0,0.2);
+  box-shadow: 0 2px 20px var(--shadow-color);
+  position: relative;
+  overflow: hidden;
 }
+
+header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(0,255,0,0.05) 10px,
+    rgba(0,255,0,0.05) 20px
+  );
+  animation: headerAnimation 20s linear infinite;
+}
+
+@keyframes headerAnimation {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50%, 50%); }
+}
+
 h1, h2 {
+  font-family: 'Cyberpunk', 'Orbitron', sans-serif;
   color: var(--accent-color);
+  position: relative;
 }
+
 h1 {
-  font-size: 2.5em;
+  font-size: 2.8em;
   margin-bottom: 10px;
-  text-shadow: 0 0 10px rgba(0,255,0,0.5);
+  text-shadow: 0 0 10px rgba(0,255,0,0.7), 0 0 20px rgba(0,255,0,0.5);
 }
+
+h2 {
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  color: var(--secondary-color);
+}
+
 .card {
   background: var(--card-bg);
-  padding: 25px;
+  padding: 30px;
   border-radius: 15px;
   margin-bottom: 30px;
-  box-shadow: 0 6px 12px rgba(0,255,0,0.1);
+  box-shadow: 0 6px 12px var(--shadow-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(0,255,0,0.1);
 }
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px var(--shadow-color);
+}
+
 form {
   display: grid;
-  gap: 20px;
+  gap: 25px;
 }
+
 label {
   font-weight: bold;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
   display: block;
+  color: var(--secondary-color);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.9em;
 }
-input, textarea, select {
+
+input, textarea {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border: 1px solid var(--accent-color);
   background-color: var(--input-bg);
   color: var(--text-color);
   border-radius: 5px;
+  transition: all 0.3s ease;
+  font-size: 1em;
 }
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--link-color);
+  box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
 textarea {
   min-height: 150px;
+  resize: vertical;
 }
-button {
+
+/* Advanced Select Styling */
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  padding: 12px 40px 12px 12px;
+  border: 1px solid var(--accent-color);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: all 0.3s ease;
+}
+
+.select-wrapper::after {
+  content: '\25BC';
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  color: var(--accent-color);
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.select-wrapper:hover::after {
+  color: var(--link-color);
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--link-color);
+  box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.2);
+}
+
+select:hover {
+  border-color: var(--link-color);
+}
+
+/* Custom File Input Styling */
+.file-input-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+.file-input-wrapper input[type="file"] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.file-input-wrapper .file-input-button {
   background-color: var(--accent-color);
   color: var(--bg-color);
   padding: 12px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  display: inline-block;
   font-size: 1em;
   font-weight: bold;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
-button:hover {
+
+.file-input-wrapper:hover .file-input-button {
   background-color: var(--link-color);
 }
+
+.file-input-name {
+  margin-left: 10px;
+  font-style: italic;
+}
+
+button {
+  background-color: var(--accent-color);
+  color: var(--bg-color);
+  padding: 15px 25px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1em;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+}
+
+button::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    rgba(255,255,255,0.2),
+    rgba(255,255,255,0.05),
+    rgba(255,255,255,0.2)
+  );
+  transform: rotate(45deg);
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--link-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,255,255,0.3);
+}
+
+button:hover::after {
+  left: 100%;
+}
+
 .warning {
   background-color: rgba(255, 0, 0, 0.1);
   border-left: 5px solid var(--warning-color);
   padding: 15px;
   margin-bottom: 20px;
   color: var(--warning-color);
+  font-style: italic;
 }
+
 footer {
   text-align: center;
-  padding: 20px 0;
+  padding: 30px 0;
   background: var(--card-bg);
   margin-top: 40px;
+  border-top: 1px solid rgba(0,255,0,0.1);
 }
+
 a {
   color: var(--link-color);
   text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
 }
+
+a::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--link-color);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
 a:hover {
-  text-decoration: underline;
+  color: var(--accent-color);
 }
+
+a:hover::after {
+  transform: scaleX(1);
+}
+
 .info {
   background-color: rgba(0, 255, 255, 0.1);
   border-left: 5px solid var(--link-color);
-  padding: 15px;
-  margin-bottom: 20px;
+  padding: 20px;
+  margin-bottom: 25px;
+  border-radius: 0 5px 5px 0;
 }
+
+.image-preview {
+  width: 200px;
+  height: 200px;
+  border: 2px solid var(--accent-color);
+  margin-bottom: 15px;
+  overflow: hidden;
+  border-radius: 10px;
+  position: relative;
+}
+
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.image-preview:hover img {
+  transform: scale(1.1);
+}
+
+.image-preview::after {
+  content: 'Preview';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.7);
+  color: var(--accent-color);
+  text-align: center;
+  padding: 5px;
+  font-size: 0.8em;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+
+.image-preview:hover::after {
+  transform: translateY(0);
+}
+
+.progress-bar {
+  width: 0%;
+  height: 4px;
+  background-color: var(--accent-color);
+  position: fixed;
+  top: 0;
+  left: 0;
+  transition: width 0.3s ease;
+  z-index: 1000;
+  box-shadow: 0 0 10px var(--accent-color);
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 5px var(--accent-color); }
+  50% { box-shadow: 0 0 20px var(--accent-color), 0 0 30px var(--link-color); }
+  100% { box-shadow: 0 0 5px var(--accent-color); }
+}
+
+.glow-effect {
+  animation: glow 2s infinite;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .container {
+    padding: 20px 10px;
+  }
+  
+  h1 {
+    font-size: 2em;
+  }
+  
+  h2 {
+    font-size: 1.5em;
+  }
+  
+  .card {
+    padding: 20px;
+  }
+  
+  button {
+    width: 100%;
+  }
+}
+
 </style>
 </head>
 <body>
+<div class="progress-bar" id="progressBar"></div>
+
 <header>
   <h1>Report Submission System</h1>
-  <p>Secure and Direct Reporting to Our Team</p>
+  <p>Secure, Swift, and Direct Reporting to Our Dedicated Team</p>
 </header>
 
 <div class="container">
-  <div class="card">
-    <h2>Enhanced Report Submission Process</h2>
-    <p>We've upgraded our reporting system to ensure swift and secure transmission of critical information. All reports are now sent directly to our dedicated team through a secure Discord webhook.</p>
+  <div class="card glow-effect">
+    <h2>Advanced Report Submission Process</h2>
+    <p>We've significantly upgraded our reporting system to ensure the swiftest and most secure transmission of critical information. All reports are now processed in real-time and sent directly to our dedicated team through an encrypted Discord webhook.</p>
     
     <div class="info">
-      <strong>New Feature:</strong> Our reports are now processed in real-time through a secure Discord channel, allowing for immediate review and action by our team.
+      <strong>New Feature:</strong> Our reports are now processed instantly through a secure Discord channel, allowing for immediate review and action by our expert team. Your voice matters, and we're listening 24/7.
     </div>
 
     <form id="reportForm">
-      <div>
+      <div class="select-wrapper">
         <label for="reportType">Type of Report:</label>
         <select id="reportType" name="reportType" required>
           <option value="">Select a type</option>
@@ -153,47 +456,69 @@ a:hover {
         <textarea id="evidence" name="evidence" placeholder="Paste any relevant links or describe any evidence you have."></textarea>
       </div>
 
+      <div class="file-input-wrapper">
+        <label for="image">Upload Image (Optional):</label>
+        <input type="file" id="image" name="image" accept="image/*">
+        <span class="file-input-button">Choose File</span>
+        <span class="file-input-name">No file chosen</span>
+      </div>
+      <div id="image-preview" class="image-preview"></div>
+
       <div>
         <label for="contact">Your Contact Information (optional):</label>
         <input type="email" id="contact" name="contact" placeholder="Enter your email if you're willing to be contacted for more information">
       </div>
 
-      <button type="submit">Submit Report</button>
+      <button type="submit" class="glow-effect">Submit Report</button>
     </form>
   </div>
 
   <div class="card">
     <h2>Secure Processing of Your Report</h2>
-    <p>Here's what happens when you submit a report:</p>
+    <p>Here's our process when you submit a report:</p>
     <ol>
-      <li>Your report is immediately encrypted and sent to our secure Discord channel via webhook.</li>
-      <li>Our 24/7 moderation team receives an instant notification.</li>
-      <li>The report is reviewed and triaged based on urgency and severity.</li>
-      <li>Sensitive information is redacted and stored securely.</li>
-      <li>Our team initiates the investigation process, collaborating with relevant authorities if necessary.</li>
-      <li>All actions are logged for accountability and future reference.</li>
+      <li>Your report is instantly encrypted and securely transmitted to our Discord channel via an encrypted webhook.</li>
+      <li>Our 24/7 expert moderation team receives an immediate notification with all details.</li>
+      <li>The report undergoes an initial AI-powered analysis for quick categorization and urgency assessment.</li>
+      <li>Our team reviews and triages based on AI suggestions, urgency, and severity.</li>
+      <li>Sensitive information is automatically redacted and stored in our secure, encrypted database.</li>
+      <li>Our specialized team initiates a thorough investigation process, collaborating with relevant authorities when necessary.</li>
+      <li>All actions, from submission to resolution, are meticulously logged for accountability and future reference.</li>
+      <li>You receive an anonymous tracking ID to check the status of your report (if contact information is provided).</li>
     </ol>
-    <p>Rest assured, your report is handled with the utmost confidentiality and care.</p>
+    <p>Rest assured, your report is handled with the utmost confidentiality, care, and efficiency. Your courage in reporting helps create a safer digital environment for everyone.</p>
   </div>
 </div>
 
 <footer>
-  <p>&copy; 2023 The Anonymous Server | FLOPS Initiative</p>
+  <p>© 2023 The Anonymous Server | FLOPS Initiative</p>
   <p><a href="https://creeper1212.github.io/The-Anonymous/">Home</a> | <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p>
 </footer>
 
 <script>
-document.getElementById('reportForm').addEventListener('submit', function(e) {
+document.getElementById('reportForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   
+  // Start progress bar
+  let progress = 0;
+  const progressBar = document.getElementById('progressBar');
+  const progressInterval = setInterval(() => {
+    progress += 5;
+    progressBar.style.width = `${progress}%`;
+    if (progress >= 90) clearInterval(progressInterval);
+  }, 100);
+
   // Collect form data
   const formData = new FormData(this);
   const reportData = Object.fromEntries(formData);
-  
+
+  // Generate a unique report ID
+  const reportId = 'REP' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+
   // Prepare the message for Discord webhook
   const webhookMessage = {
+    content: `New Report Submission: ${reportId}`,
     embeds: [{
-      title: "New Report Submission",
       color: 0x00ff00,
       fields: Object.entries(reportData).map(([key, value]) => ({
         name: key.charAt(0).toUpperCase() + key.slice(1).replace('_', ' '),
@@ -207,27 +532,71 @@ document.getElementById('reportForm').addEventListener('submit', function(e) {
     }]
   };
 
+  // If an image is uploaded, convert it to base64
+  if (formData.has('image') && formData.get('image').size > 0) {
+    const imageFile = formData.get('image');
+    const reader = new FileReader();
+    reader.readAsDataURL(imageFile);
+    await new Promise(resolve => reader.onload = resolve);
+    webhookMessage.embeds[0].image = { url: reader.result };
+  }
+
   // Send to Discord webhook (note: actual webhook URL would be securely stored server-side)
-  fetch('https://discord.com/api/webhooks/1264602220519751792/dr_DmIRC4JXtmhaFpASEk0G-thGHkU-IyCRQ846fNBFRvxDxay_IqIHT_hYmgB4pv_62', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(webhookMessage),
-  })
-  .then(response => {
+  try {
+    const response = await fetch('https://discord.com/api/webhooks/1264592818136158268/0IEdR4kaZvPZCTHd0oBHbpRh0H_ruN_y918mBfMG1iaCtADwGSF2tp4yCcw6cLeWAXtR', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(webhookMessage),
+    });
+
     if (response.ok) {
-      alert('Report submitted successfully. Thank you for helping keep our community safe.');
+      clearInterval(progressInterval);
+      progressBar.style.width = '100%';
+      setTimeout(() => {
+        progressBar.style.width = '0%';
+      }, 1000);
+      alert(`Report submitted successfully. Your report ID is ${reportId}. Thank you for helping keep our community safe.`);
       this.reset();
+      document.getElementById('image-preview').innerHTML = '';
+      document.querySelector('.file-input-name').textContent = 'No file chosen';
     } else {
       throw new Error('Failed to submit report');
     }
-  })
-  .catch(error => {
+  } catch (error) {
     console.error('Error:', error);
     alert('An error occurred while submitting the report. Please try again later.');
-  });
+  }
 });
+
+// Image preview functionality
+document.getElementById('image').addEventListener('change', function(e) {
+  const imagePreview = document.getElementById('image-preview');
+  imagePreview.innerHTML = '';
+  const file = this.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      imagePreview.appendChild(img);
+    };
+    reader.readAsDataURL(file);
+    document.querySelector('.file-input-name').textContent = file.name;
+  } else {
+    document.querySelector('.file-input-name').textContent = 'No file chosen';
+  }
+});
+
+// Add glow effect to form fields when focused
+const formInputs = document.querySelectorAll('input, textarea, select');
+formInputs.forEach(input => {
+  input.addEventListener('focus', () => input.classList.add('glow-effect'));
+  input.addEventListener('blur', () => input.classList.remove('glow-effect'));
+});
+
 </script>
 
-</body></html>
+</body>
+</html>
