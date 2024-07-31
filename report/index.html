@@ -520,10 +520,10 @@ document.getElementById('reportForm').addEventListener('submit', async function(
     content: `New Report Submission: ${reportId}`,
     embeds: [{
       title: "Report Details",
-      color: 0x00ff00,
-      fields: Object.entries(reportData).map(([key, value]) => ({
+      color: 3329330, // Equivalent to 0x00ff00, but as a decimal
+      fields: Object.entries(reportData).filter(([key, value]) => value).map(([key, value]) => ({
         name: key.charAt(0).toUpperCase() + key.slice(1).replace('_', ' '),
-        value: value || "Not provided",
+        value: value.toString().substring(0, 1024), // Ensure value is a string and doesn't exceed Discord's limit
         inline: false
       })),
       footer: {
@@ -533,7 +533,7 @@ document.getElementById('reportForm').addEventListener('submit', async function(
     }]
   };
 
-  // If an image is uploaded, convert it to base64
+  // If an image is uploaded, convert it to base64 and add to embed
   if (formData.has('image') && formData.get('image').size > 0) {
     const imageFile = formData.get('image');
     const reader = new FileReader();
@@ -554,6 +554,7 @@ document.getElementById('reportForm').addEventListener('submit', async function(
 
     if (!response.ok) {
       const errorText = await response.text();
+      console.error('Discord API Error:', errorText);
       throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
     }
 
@@ -568,6 +569,7 @@ document.getElementById('reportForm').addEventListener('submit', async function(
     document.querySelector('.file-input-name').textContent = 'No file chosen';
   } catch (error) {
     console.error('Error:', error);
+    console.error('Webhook Message:', JSON.stringify(webhookMessage, null, 2));
     alert(`An error occurred while submitting the report: ${error.message}. Please try again later.`);
   }
 });
