@@ -519,6 +519,7 @@ document.getElementById('reportForm').addEventListener('submit', async function(
   const webhookMessage = {
     content: `New Report Submission: ${reportId}`,
     embeds: [{
+      title: "Report Details",
       color: 0x00ff00,
       fields: Object.entries(reportData).map(([key, value]) => ({
         name: key.charAt(0).toUpperCase() + key.slice(1).replace('_', ' '),
@@ -541,7 +542,7 @@ document.getElementById('reportForm').addEventListener('submit', async function(
     webhookMessage.embeds[0].image = { url: reader.result };
   }
 
-  // Send to Discord webhook (note: actual webhook URL would be securely stored server-side)
+  // Send to Discord webhook
   try {
     const response = await fetch('https://discord.com/api/webhooks/1264592818136158268/0IEdR4kaZvPZCTHd0oBHbpRh0H_ruN_y918mBfMG1iaCtADwGSF2tp4yCcw6cLeWAXtR', {
       method: 'POST',
@@ -551,22 +552,23 @@ document.getElementById('reportForm').addEventListener('submit', async function(
       body: JSON.stringify(webhookMessage),
     });
 
-    if (response.ok) {
-      clearInterval(progressInterval);
-      progressBar.style.width = '100%';
-      setTimeout(() => {
-        progressBar.style.width = '0%';
-      }, 1000);
-      alert(`Report submitted successfully. Your report ID is ${reportId}. Thank you for helping keep our community safe.`);
-      this.reset();
-      document.getElementById('image-preview').innerHTML = '';
-      document.querySelector('.file-input-name').textContent = 'No file chosen';
-    } else {
-      throw new Error('Failed to submit report');
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
     }
+
+    clearInterval(progressInterval);
+    progressBar.style.width = '100%';
+    setTimeout(() => {
+      progressBar.style.width = '0%';
+    }, 1000);
+    alert(`Report submitted successfully. Your report ID is ${reportId}. Thank you for helping keep our community safe.`);
+    this.reset();
+    document.getElementById('image-preview').innerHTML = '';
+    document.querySelector('.file-input-name').textContent = 'No file chosen';
   } catch (error) {
     console.error('Error:', error);
-    alert('An error occurred while submitting the report. Please try again later.');
+    alert(`An error occurred while submitting the report: ${error.message}. Please try again later.`);
   }
 });
 
@@ -595,7 +597,6 @@ formInputs.forEach(input => {
   input.addEventListener('focus', () => input.classList.add('glow-effect'));
   input.addEventListener('blur', () => input.classList.remove('glow-effect'));
 });
-
 </script>
 
 </body>
